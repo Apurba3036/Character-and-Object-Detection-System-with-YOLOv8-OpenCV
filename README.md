@@ -2,6 +2,14 @@
 
 A comprehensive detection system built using YOLOv8 and OpenCV, capable of detecting and tracking both characters and objects in images and videos with high accuracy and real-time performance.
 
+## 🎯 Example Results
+
+
+### 🎥 Video Detection
+<img width="565" height="386" alt="image" src="https://github.com/user-attachments/assets/6cbb1162-284a-4fba-a75b-841a6117c7e3" />
+
+
+Bounding boxes with character and object labels are displayed in real-time.
 ## 🚀 Features
 
 - 🧠 YOLOv8 Model for state-of-the-art detection
@@ -67,15 +75,6 @@ python detect.py --video videos/sample.mp4
 python detect.py --webcam
 ```
 
-## 🎯 Example Results
-
-
-### 🎥 Video Detection
-<img width="565" height="386" alt="image" src="https://github.com/user-attachments/assets/6cbb1162-284a-4fba-a75b-841a6117c7e3" />
-
-
-Bounding boxes with character and object labels are displayed in real-time.
-
 ## 📊 Model Performance
 
 | Model Variant | Speed (ms) | mAP@50 | Parameters |
@@ -100,3 +99,4 @@ Feel free to fork the repo and submit a pull request.
 
 
 This project is licensed under the MIT License.
+
