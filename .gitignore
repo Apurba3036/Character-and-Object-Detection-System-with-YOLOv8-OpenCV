@@ -1,0 +1,36 @@
+# Specific large files that are causing issues
+models/craft_mlt_25k.pth
+yolov8x.pt
+
+# Model files
+models/
+*.pt
+*.pth
+*.weights
+*.onnx
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual Environment
+venv/
+ENV/
+
+# Media files
+videos/
+images/
+*.mp4
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# IDE
+.idea/
+.vscode/
+
+# Logs and outputs
+runs/
+*.log

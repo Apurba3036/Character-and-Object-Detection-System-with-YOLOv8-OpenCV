@@ -1,0 +1,90 @@
+from ultralytics import YOLO
+import cv2
+import torch
+import numpy as np
+from time import time
+
+# Auto-select device (GPU if available, else CPU)
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Using device: {device}")
+
+# Load YOLOv8 model with a larger variant for better accuracy
+model = YOLO("yolov8x.pt")  # Using YOLOv8x instead of YOLOv8n for better accuracy
+
+# Model configuration
+conf_threshold = 0.5  # Confidence threshold
+iou_threshold = 0.45  # NMS IOU threshold
+
+# Open video (replace with 0 for webcam)
+video_path = "sample.mp4"
+cap = cv2.VideoCapture(video_path)
+
+cv2.namedWindow("Detection System", cv2.WINDOW_NORMAL)
+
+# Class names from COCO dataset
+class_names = model.names
+
+# Initialize FPS counter
+fps_start_time = time()
+fps = 0
+frame_count = 0
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # Resize frame for better accuracy while maintaining speed
+    frame = cv2.resize(frame, (1280, 720))
+
+    # Run inference with configured thresholds
+    results = model(frame, conf=conf_threshold, iou=iou_threshold)[0]
+
+    # Initialize counters dynamically
+    counts = {name: 0 for name in class_names.values()}
+
+    # Process detections
+    annotated_frame = frame.copy()
+    
+    for box in results.boxes:
+        # Get box coordinates and confidence
+        x1, y1, x2, y2 = map(int, box.xyxy[0])
+        confidence = float(box.conf[0])
+        cls = int(box.cls[0])
+        
+        if confidence >= conf_threshold:
+            counts[class_names[cls]] += 1
+            
+            # Draw more detailed bounding boxes
+            cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            
+            # Add label with class name and confidence
+            label = f"{class_names[cls]}: {confidence:.2f}"
+            cv2.putText(annotated_frame, label, (x1, y1-10), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+    # Calculate and display FPS
+    frame_count += 1
+    if frame_count >= 30:  # Update FPS every 30 frames
+        fps = 30 / (time() - fps_start_time)
+        fps_start_time = time()
+        frame_count = 0
+
+    # Prepare display text with counts and FPS
+    counts_text = " | ".join([f"{name}: {count}" for name, count in counts.items() if count > 0])
+    fps_text = f"FPS: {fps:.1f}"
+    
+    # Display information
+    cv2.putText(annotated_frame, counts_text, (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+    cv2.putText(annotated_frame, fps_text, (20, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
+    # Resize window and show frame
+    cv2.resizeWindow("Detection System", 1920, 1080)
+    cv2.imshow("Detection System", annotated_frame)
+
+    # Press 'q' to quit
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
