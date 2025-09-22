@@ -69,11 +69,10 @@ python detect.py --webcam
 
 ## 🎯 Example Results
 
-### 📸 Image Detection
-[Add example images here]
 
 ### 🎥 Video Detection
-[Add example video screenshots here]
+<img width="565" height="386" alt="image" src="https://github.com/user-attachments/assets/6cbb1162-284a-4fba-a75b-841a6117c7e3" />
+
 
 Bounding boxes with character and object labels are displayed in real-time.
 
@@ -98,5 +97,6 @@ Contributions, issues, and feature requests are welcome!
 Feel free to fork the repo and submit a pull request.
 
 ## 📜 License
+
 
 This project is licensed under the MIT License.
